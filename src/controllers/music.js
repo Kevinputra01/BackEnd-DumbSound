@@ -24,6 +24,25 @@ exports.getAllMusic = async (req, res) => {
     }
 };
 
+exports.getMusic = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = await music.findOne({
+            where: { id },
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+        });
+        res.status(200).send({
+            status: "success",
+            data
+        });
+    } catch (error) {
+        res.status(500).send({
+            status: "failed",
+            message: "Server error",
+        });
+    }
+};
+
 exports.addMusic = async (req, res) => {
     console.log(req.users);
     try {
@@ -56,6 +75,39 @@ exports.addMusic = async (req, res) => {
             status: "failed",
             message: "Server error",
         });
+    }
+};
+
+exports.editMusic = async (req, res) => {
+    try {
+        const image = req.files.thumbnail[0].filename;
+        const audio = req.files.attache[0].filename;
+        const { id } = req.params;
+        const artistData = await artist.findOne({
+            where: { id: data.id_artist },
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+        });
+        const body = {
+            ...req.body,
+            attache: audio,
+            thumbnail: image,
+            id_artist: artistData,
+        };
+      await music.update(body, { where: { id } });
+      const data = await music.findOne({
+        where: { id },
+        attributes: { exclude: [ "createdAt", "updatedAt"] },
+      });
+      res.status(200).send({
+        status: "success",
+        data
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        status: "failed",
+        message: "Server error",
+      });
     }
 };
 

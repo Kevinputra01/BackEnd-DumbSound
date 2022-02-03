@@ -16,8 +16,10 @@ router.get("/user/:id", getUser);
 router.patch("/user/:id", auth, uploadFile("image"), editUser);
 router.delete("/user/:id", deleteUser);
 
-const { addMusic, deleteMusic, getAllMusic } = require("../controllers/music");
+const { addMusic, editMusic, deleteMusic, getMusic, getAllMusic } = require("../controllers/music");
 router.get("/musics", getAllMusic);
+router.get("/music/:id", getMusic);
+router.patch("/music/:id", editMusic);
 router.delete("/music/:id", deleteMusic);
 router.post("/add-music", auth, uploadMusic(["attache", "thumbnail"]), addMusic);
 
